@@ -16,6 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from frontend import views 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('post/', views.post, name='frontend.post'),
+    path('get/', views.post, name='frontend.get'),
 ]
