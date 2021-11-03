@@ -1,0 +1,12 @@
+migrations/
+teamcodeenv/
+__pycache__/
+__init__.py
+
+static/admin/
+
+teamcode/current_host.py
+db.sqlite3
+sendtoprod.sh
+deploy.sh
+
