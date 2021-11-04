@@ -32,6 +32,8 @@ ALLOWED_HOSTS = ["tc.abehssera.com", "127.0.0.1", "217.182.204.48"]
 # Application definition
 
 INSTALLED_APPS = [
+    'backend',
+    'frontend',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
