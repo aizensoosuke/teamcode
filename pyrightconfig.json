@@ -1,0 +1,8 @@
+{
+    "exclude": [ "teamcodeenv", ".git", "static", "media" ],
+    "typingsPath": "./typestubs",
+
+    "reportMissingImports": true,
+
+    "venv": "./teamcodeenv"
+}
