@@ -15,7 +15,7 @@ class FilesHandler:
 
     sessionId : str = ""
 
-    def __init__(self, sessionId, content : dict[str, str] = {}):
+    def __init__(self, sessionId, content : dict = {}):
         """Initialize this class
 
         Create the necessary files :
