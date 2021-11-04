@@ -1,5 +1,6 @@
 from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
+
+storage = django.core.files.storage.FileSystemStorage()
 
 class FilesHandler:
     """
@@ -38,7 +39,7 @@ class FilesHandler:
 
         self.sessionId = sessionId
 
-        if not default_storage.exists(self._getPath("merged")):
+        if not storage.exists(self._getPath("merged")):
             self.files["owner"] = self._createFile("owner")
             self.files["collaborator"] = self._createFile("collaborator")
             self.files["merged"] = self._createFile("merged")
@@ -53,7 +54,7 @@ class FilesHandler:
 
 
     def getPath(self, userId : str) -> str:
-        return default_storage.path(self._getPath(userId))
+        return storage.path(self._getPath(userId))
 
 
     def _getPath(self, userId : str) -> str:
@@ -115,7 +116,7 @@ class FilesHandler:
 
         # TODO: we do not check if the files exist. We simply override.
 
-        return default_storage.save(self._getPath(userId), ContentFile(b''))
+        return storage.save(self._getPath(userId), ContentFile(b''))
 
 
     def write(self, userId : str, content : str) -> int:
@@ -134,7 +135,7 @@ class FilesHandler:
         -------
         The status code returned by write()
         """
-        return default_storage.open(self._getPath(userId), mode="w").write(content)
+        return storage.open(self._getPath(userId), mode="w").write(content)
 
     def read(self, userId : str) -> str:
         """Reads the user's file and returns content as a string.
@@ -149,4 +150,4 @@ class FilesHandler:
         str
             The file's content
         """
-        return default_storage.open(self._getPath(userId), mode="r").read()
+        return storage.open(self._getPath(userId), mode="r").read()
