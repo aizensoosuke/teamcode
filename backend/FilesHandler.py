@@ -1,7 +1,7 @@
 from django.core.files.base import ContentFile
-from django.core.files.storage import FileSystemStorage
+from django.core.files.storage import default_storage
 
-storage = FileSystemStorage()
+storage = default_storage
 
 class FilesHandler:
     """
