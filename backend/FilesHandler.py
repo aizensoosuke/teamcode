@@ -41,9 +41,9 @@ class FilesHandler:
         self.sessionId = sessionId
 
         if not storage.exists(self._getPath("merged")):
-            self.files["owner"] = self._createFile("owner")
-            self.files["collaborator"] = self._createFile("collaborator")
-            self.files["merged"] = self._createFile("merged")
+            self._createFile("owner")
+            self._createFile("collaborator")
+            self._createFile("merged")
 
             self.write("owner", "")
             self.write("collaborator", "")
