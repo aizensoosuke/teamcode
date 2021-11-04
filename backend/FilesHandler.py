@@ -85,7 +85,7 @@ class FilesHandler:
 
         assert self.sessionId != ""
 
-        return self.sessionId + "/" + userId
+        return storage.generate_filename(self.sessionId + "/" + userId)
 
 
     def _createFile(self, userId : str) -> str:
