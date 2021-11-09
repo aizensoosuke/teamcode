@@ -41,8 +41,8 @@ class Session(models.Model):
         newId = uuid.uuid4()
 
         newSession = cls(sessionId=newId, hostId=hostId, mergedFile=cls.genPath(newId, "merged"), tmpFile=cls.genPath(newId, "tmp"))
-        newSession.mergedFile.save(newSession.mergedFile.name, ContentFile(""))
-        newSession.tmpFile.save(newSession.tmpFile.name, ContentFile(""))
+        newSession.mergedFile.open(mode="w").write("").close()
+        newSession.tmpFile.open(mode="w").write("").close()
         newSession.save()
 
         return newSession
@@ -69,7 +69,11 @@ class User(models.Model):
         """Read the user's file.
 
         Return the file's content as an str"""
-        return self.userFile.read()
+
+        content = self.userFile.open(mode="r").read()
+        self.userFile.close()
+
+        return content
 
     def write(self, content) -> str:
         """Override the user's file with provided `content`.
@@ -77,7 +81,7 @@ class User(models.Model):
         Return the status code returned by write()
         """
 
-        self.userFile.save(self.userFile.name, ContentFile(content))
+        self.userFile.open(mode="w").write(content).close()
         self.save()
         return self.session.merge()
 
@@ -93,7 +97,7 @@ class User(models.Model):
        session = Session.objects.filter(sessionId = sessionId)
 
        newUser = cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
-       newUser.userFile.save(newUser.userFile.name, ContentFile(""))
+       newUser.userFile.open(mode="w").write("").close()
        newUser.save()
 
        return newUser
@@ -107,7 +111,7 @@ class User(models.Model):
         session = Session.create(newId)
 
         newUser = cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
-        newUser.userFile.save(newUser.userFile.name, ContentFile(""))
+        newUser.userFile.open(mode="w").write("").close()
         newUser.save()
 
         return newUser
