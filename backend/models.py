@@ -41,9 +41,8 @@ class Session(models.Model):
         newId = uuid.uuid4()
 
         newSession = cls(sessionId=newId, hostId=hostId, mergedFile=cls.genPath(newId, "merged"), tmpFile=cls.genPath(newId, "tmp"))
-        newSession.mergedFile.open(mode="w").write("").close()
-        newSession.tmpFile.open(mode="w").write("").close()
-        newSession.save()
+        newSession.mergedFile.save(newSession.mergedFile.name, ContentFile(""))
+        newSession.tmpFile.save(newSession.tmpFile.name, ContentFile(""))
 
         return newSession
 
@@ -97,7 +96,7 @@ class User(models.Model):
        session = Session.objects.filter(sessionId = sessionId)
 
        newUser = cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
-       newUser.userFile.open(mode="w").write("").close()
+       newUser.userFile.save(newUser.userFile.name, ContentFile(""))
        newUser.save()
 
        return newUser
@@ -111,7 +110,7 @@ class User(models.Model):
         session = Session.create(newId)
 
         newUser = cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
-        newUser.userFile.open(mode="w").write("").close()
+        newUser.userFile.save(newUser.userFile.name, ContentFile(""))
         newUser.save()
 
         return newUser
