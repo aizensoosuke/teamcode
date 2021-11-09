@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+
 from backend.models import Session, User
 
 # Create your views here.
@@ -28,16 +30,16 @@ def get(request, *args, **kwargs):
     return render(request, 'frontend/view_file.html', context)
 
 def post(request, *args, **kwargs):
-    if request.method != 'GET':
-        return render(request, 'frontend/error.html', { "error": "GET method required for posting changes." })
+    if request.method != 'POST':
+        return render(request, 'frontend/error.html', { "error": "POST method required for posting changes." })
 
-    sessionId = request.GET["sessionId"]
-    userId = request.GET["userId"]
+    sessionId = request.POST["sessionId"]
+    userId = request.POST["userId"]
     
-    if data not in request.GET:
+    if data not in request.POST:
         return render(request, 'frontend/error.html', { "error": "No data posted." })
 
-    fileSubmitted = request.GET["content"]
+    fileSubmitted = request.POST["content"]
 
     user = User.objects.all().filter(userId == userId, session__sessionId == sessionId)
     message = user.write(fileSubmitted)
