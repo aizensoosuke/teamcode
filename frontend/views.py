@@ -34,13 +34,14 @@ def post(request, *args, **kwargs):
     if request.method != 'POST':
         return render(request, 'frontend/error.html', { "error": "POST method required for posting changes." })
 
-    sessionId = request.POST["sessionId"]
-    userId = request.POST["userId"]
+    jsondecoded = json.loads(request.body)
+    sessionId = jsondecoded["sessionId"]
+    userId = jsondecoded["userId"]
     
-    if data not in request.POST:
+    if data not in jsondecoded:
         return render(request, 'frontend/error.html', { "error": "No data posted." })
 
-    fileSubmitted = request.POST["content"]
+    fileSubmitted = jsondecoded["content"]
 
     user = User.objects.all().filter(userId == userId, session__sessionId == sessionId)
     message = user.write(fileSubmitted)
