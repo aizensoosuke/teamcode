@@ -25,17 +25,16 @@
         <br>
         <a href="/get/?sessionId={{ sessionId }}&userId={{ userId }}">get</a>
         <br>
-        <br>
 
-        <form action="/post/">
+        <form>
             <textarea name="content"></textarea>
-
+            
             <div class="meta" style="display: none">
                 <input name="sessionId">{{ sessionId }}</input>
                 <input name="userId">{{ userId }}</input>
             </div>
-
-            <input type="submit" value="Submit"></input>
+            
+            <submit ></submit>
         </form>
     </body>
 </html>
