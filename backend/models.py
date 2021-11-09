@@ -13,8 +13,8 @@ class Session(models.Model):
 
     sessionId = models.CharField(max_length=255, unique=True)
     hostId = models.CharField(max_length=255)
-    tmpFile = models.FileField(max_length=255, upload_to="sessionFiles/")
-    mergedFile = models.FileField(max_length=255, upload_to="sessionFiles/")
+    tmpFile = models.FileField(max_length=255)
+    mergedFile = models.FileField(max_length=255)
 
     def get(self):
         return self.mergedFile.read()
@@ -27,6 +27,10 @@ class Session(models.Model):
         return "Successfully merged all files into one"
 
     @classmethod
+    def genPath(cls, sessionId, filename):
+        return f'{sessionId}/sessfiles/{filename}'
+
+    @classmethod
     def create(cls, hostId):
         """Create a new session hosted by User with id hostId.
         The hostId is required.
@@ -34,10 +38,13 @@ class Session(models.Model):
 
         newId = uuid.uuid4()
 
-        newSession = cls(sessionId=newId, hostId=hostId, mergedFile="merged", tmpFile="tmp")
+        newSession = cls(sessionId=newId, hostId=hostId, mergedFile=cls.genPath(newId, "merged"), tmpFile=cls.genPath(newId, "tmp"))
         newSession.save()
 
         return newSession
+
+    def __str__(self):
+        return self.sessionId
 
 class User(models.Model):
     """Represent a user that can connect to a Session."""
