@@ -20,9 +20,9 @@ from django.urls import path
 
 from frontend import views 
 
-urlpatterns = (
+urlpatterns = [
     path('admin/', admin.site.urls),
     path('post/', views.post, name='frontend.post'),
     path('get/', views.get, name='frontend.get'),
     path('new/', views.new, name='frontend.new')
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
