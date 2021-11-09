@@ -27,6 +27,8 @@ class Session(models.Model):
         users = User.objects.all().filter(session__sessionId = self.sessionId)
         for user in users:
             subprocess.run(["git", "merge-file", self.tmpFile.path, self.mergedFile.path, user.userFile.path, "--ours"])
+        subprocess.run(["cp", self.tmpFile.path, self.mergedFile.path])
+        self.save()
         return "Successfully merged all files into one"
 
     @classmethod
