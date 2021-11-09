@@ -30,7 +30,7 @@ class Session(models.Model):
 
     @classmethod
     def genPath(cls, sessionId, filename):
-        return f'{sessionId}/sessfiles/{filename}'
+        return f'sessionFiles/{sessionId}/sessfiles/{filename}'
 
     @classmethod
     def create(cls, hostId):
@@ -55,7 +55,7 @@ class User(models.Model):
 
     session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
     userId = models.CharField(max_length=255, unique=True)
-    userFile = models.FileField(max_length=255, upload_to="sessionFiles/")
+    userFile = models.FileField(max_length=255)
 
 
     def get(self) -> str:
@@ -83,7 +83,7 @@ class User(models.Model):
 
     @classmethod
     def genPath(cls, sessionId, userId):
-        return f'{sessionId}/{userId}'
+        return f'sessionFiles/{sessionId}/{userId}'
 
     @classmethod
     def join(cls, sessionId : str):
