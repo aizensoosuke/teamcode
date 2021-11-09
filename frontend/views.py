@@ -1,7 +1,21 @@
 from django.shortcuts import render
-import backend.Interface as backend
+from backend.models import Session, User
 
 # Create your views here.
+def new(request, *args, **kwargs):
+    if request.method != 'GET':
+        return render(request, 'frontend/error.html', { "error": "GET method required for creating a session." })
+
+    host = User.create()
+    host.save()
+
+    context = {
+        "sessionId": host.session.sessionId,
+        "userId": host.userId
+    }
+
+    return render(request, 'frontend/new.html', context)
+
 def get(request, *args, **kwargs):
     if request.method != 'GET':
         return render(request, 'frontend/error.html', { "error": "GET method required for getting file." })
@@ -9,7 +23,7 @@ def get(request, *args, **kwargs):
     sessionId = request.GET["sessionId"]
     
     context = {
-        "content": backend.getContent(sessionId)
+        "content": Session.objects.all().filter(sessionId == sessionId)[0].get()
     }
 
     return render(request, 'frontend/view_file.html', context)
@@ -26,7 +40,9 @@ def post(request, *args, **kwargs):
 
     fileSubmitted = request.POST["content"]
     
-    message = backend.postContent(sessionId, userId, fileSubmitted)
+    user = User.objects.all().filter(userId == userId, session__sessionId == sessionId)
+    message = user.write(fileSubmitted)
+    user.save()
 
     context = {
         "message": message 

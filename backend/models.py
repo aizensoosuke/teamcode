@@ -1,8 +1,90 @@
+import uuid
+import subprocess
 from django.db import models
 
 # Create your models here.
-
 class Session(models.Model):
-    sessionId = models.CharField(max_length = 100)
-    ownerId = models.CharField(max_length = 100)
-    collaboratorId = models.CharField(max_length = 100)
+    """Handle session, file creation and editting.
+
+    Every time a user publishes a new version of his file,
+    the file will be updated on the server's disk.
+    The files will then be merged into the merged file.
+    """
+
+    sessionId = models.CharField(max_length=255, unique=True)
+    hostId = models.CharField(max_length=255)
+    tmpFile = models.FileField(max_length=255, upload_to="sessionFiles/")
+    mergedFile = models.FileField(max_length=255, upload_to="sessionFiles/")
+
+    def get(self):
+        return self.mergedFile.read()
+
+    def merge(self):
+        userFiles = User.objects.all().filter(session__sessionId == self.sessionId)
+        for userFile in userFiles:
+            command = f'git merge-file "{self.tmpFile.path}" "{self.mergedFile.path}" "{userFile.path}" --ours'
+            subprocess.run(command)
+        return "Successfully merged all files into one"
+
+    @classmethod
+    def create(cls, hostId):
+        """Create a new session hosted by User with id hostId.
+        The hostId is required.
+        """
+
+        newId = uuid.uuid4()
+
+        return cls(sessionId=newId, hostId=hostId, mergedFile="merged", tmpFile="tmp")
+
+class User(models.Model):
+    """Represent a user that can connect to a Session."""
+
+    session = models.ForeignKey(Session, on_delete=models.CASCADE, null=True)
+    userId = models.CharField(max_length=255, unique=True)
+    userFile = models.FileField(max_length=255, upload_to="sessionFiles/")
+
+
+    def get(self) -> str:
+        """Get the merged file from the user's session.
+
+        Return the file's content as an str
+        """
+        return self.session.getMerged()
+
+    def read(self) -> str:
+        """Read the user's file.
+
+        Return the file's content as an str"""
+        return self.userFile.read()
+
+    def write(self, content) -> str:
+        """Override the user's file with provided `content`.
+
+        Return the status code returned by write()
+        """
+
+        self.userFile.write(content)
+        return self.session.merge()
+
+    @classmethod
+    def genPath(cls, sessionId, userId):
+        return f'{sessionId}/{userId}'
+
+    @classmethod
+    def join(cls, sessionId : str):
+       """Join an existing session with id `sessionId`"""
+
+       newId = uuid.uuid4()
+       session = Session.objects.filter(sessionId == sessionId)
+
+       return cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
+
+    @classmethod
+    def create(cls):
+        """Create a new session.
+        This user will be the host of the new session."""
+
+        newId = uuid.uuid4()
+        session = Session.create(newId)
+
+        return cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
