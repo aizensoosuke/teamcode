@@ -77,7 +77,8 @@ class User(models.Model):
         Return the status code returned by write()
         """
 
-        self.userFile.write(content)
+        self.userFile.save(self.userFile.name, ContentFile(content))
+        self.save()
         return self.session.merge()
 
     @classmethod
