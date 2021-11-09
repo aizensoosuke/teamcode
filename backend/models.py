@@ -80,8 +80,10 @@ class User(models.Model):
         Return the status code returned by write()
         """
 
-        self.userFile.open(mode="w").write(content).close()
+        self.userFile.open(mode="w").write(content)
+        self.userFile.close()
         self.save()
+
         return self.session.merge()
 
     @classmethod
