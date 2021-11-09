@@ -34,7 +34,10 @@ class Session(models.Model):
 
         newId = uuid.uuid4()
 
-        return cls(sessionId=newId, hostId=hostId, mergedFile="merged", tmpFile="tmp")
+        newSession = cls(sessionId=newId, hostId=hostId, mergedFile="merged", tmpFile="tmp")
+        newSession.save()
+
+        return newSession
 
 class User(models.Model):
     """Represent a user that can connect to a Session."""
@@ -77,7 +80,10 @@ class User(models.Model):
        newId = uuid.uuid4()
        session = Session.objects.filter(sessionId == sessionId)
 
-       return cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
+       newUser = cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
+       newUser.save()
+
+       return newUser
 
     @classmethod
     def create(cls):
@@ -87,4 +93,7 @@ class User(models.Model):
         newId = uuid.uuid4()
         session = Session.create(newId)
 
-        return cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
+        newUser = cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
+        newUser.save()
+
+        return newUser

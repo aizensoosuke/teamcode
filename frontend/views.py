@@ -7,7 +7,6 @@ def new(request, *args, **kwargs):
         return render(request, 'frontend/error.html', { "error": "GET method required for creating a session." })
 
     host = User.create()
-    host.save()
 
     context = {
         "sessionId": host.session.sessionId,
@@ -39,10 +38,9 @@ def post(request, *args, **kwargs):
         return render(request, 'frontend/error.html', { "error": "No data posted." })
 
     fileSubmitted = request.POST["content"]
-    
+
     user = User.objects.all().filter(userId == userId, session__sessionId == sessionId)
     message = user.write(fileSubmitted)
-    user.save()
 
     context = {
         "message": message 
