@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('post/', views.post, name='frontend.post'),
     path('get/', views.get, name='frontend.get'),
-    path('new/', views.get, name='frontend.new')
+    path('new/', views.new, name='frontend.new')
 ]
