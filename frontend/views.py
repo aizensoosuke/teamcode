@@ -40,7 +40,7 @@ def post(request, *args, **kwargs):
     sessionId = jsondecoded["sessionId"]
     userId = jsondecoded["userId"]
     
-    if data not in jsondecoded:
+    if "data" not in jsondecoded:
         return render(request, 'frontend/error.html', { "error": "No data posted." })
 
     fileSubmitted = jsondecoded["content"]
