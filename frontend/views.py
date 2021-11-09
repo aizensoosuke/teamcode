@@ -45,7 +45,7 @@ def post(request, *args, **kwargs):
 
     fileSubmitted = data["content"]
 
-    user = User.objects.all().filter(userId = userId, session__sessionId = sessionId)
+    user = User.objects.all().filter(userId = userId, session__sessionId = sessionId)[0]
     message = user.write(fileSubmitted)
 
     context = {

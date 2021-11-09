@@ -20,7 +20,7 @@ class Session(models.Model):
         return self.mergedFile.read()
 
     def merge(self):
-        userFiles = User.objects.all().filter(session__sessionId == self.sessionId)
+        userFiles = User.objects.all().filter(session__sessionId = self.sessionId)
         for userFile in userFiles:
             command = f'git merge-file "{self.tmpFile.path}" "{self.mergedFile.path}" "{userFile.path}" --ours'
             subprocess.run(command)
@@ -78,7 +78,7 @@ class User(models.Model):
        """Join an existing session with id `sessionId`"""
 
        newId = uuid.uuid4()
-       session = Session.objects.filter(sessionId == sessionId)
+       session = Session.objects.filter(sessionId = sessionId)
 
        newUser = cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
        newUser.save()
