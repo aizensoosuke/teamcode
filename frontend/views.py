@@ -26,7 +26,7 @@ def get(request, *args, **kwargs):
     sessionId = request.GET["sessionId"]
     
     context = {
-        "content": Session.objects.all().filter(sessionId == sessionId)[0].get()
+        "content": Session.objects.all().filter(sessionId = sessionId)[0].get()
     }
 
     return render(request, 'frontend/view_file.html', context)
@@ -45,7 +45,7 @@ def post(request, *args, **kwargs):
 
     fileSubmitted = data["content"]
 
-    user = User.objects.all().filter(userId == userId, session__sessionId == sessionId)
+    user = User.objects.all().filter(userId = userId, session__sessionId = sessionId)
     message = user.write(fileSubmitted)
 
     context = {
