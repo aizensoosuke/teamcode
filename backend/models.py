@@ -104,3 +104,6 @@ class User(models.Model):
         newUser.save()
 
         return newUser
+
+    def __str__(self):
+        return self.userId
