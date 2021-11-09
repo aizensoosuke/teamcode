@@ -26,7 +26,7 @@ def get(request, *args, **kwargs):
     sessionId = request.GET["sessionId"]
     
     context = {
-        "content": Session.objects.all().filter(sessionId = sessionId)[0].get()
+        "content": Session.objects.all().filter(sessionId=sessionId)[0].get()
     }
 
     return render(request, 'frontend/view_file.html', context)

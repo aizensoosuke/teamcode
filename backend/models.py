@@ -19,7 +19,9 @@ class Session(models.Model):
     mergedFile = models.FileField(max_length=255)
 
     def get(self):
-        return self.mergedFile.read()
+        content = self.mergedFile.open(mode="r").read()
+        self.mergedFile.close()
+        return content
 
     def merge(self):
         users = User.objects.all().filter(session__sessionId = self.sessionId)
@@ -61,7 +63,7 @@ class User(models.Model):
 
         Return the file's content as an str
         """
-        return self.session.getMerged()
+        return self.session.get()
 
     def read(self) -> str:
         """Read the user's file.
