@@ -2,7 +2,7 @@ import uuid
 import subprocess
 
 from django.db import models
-from django.core.files import ContentFile
+from django.core.files.base import ContentFile
 
 # Create your models here.
 class Session(models.Model):
