@@ -36,7 +36,8 @@ def post(request, *args, **kwargs):
     if request.method != 'POST':
         return render(request, 'frontend/error.html', { "error": "POST method required for posting changes." })
 
-    data = json.loads(request.body)
+    #data = json.loads(request.body)
+    data = request.POST
     sessionId = data["sessionId"]
     userId = data["userId"]
     
