@@ -29,6 +29,7 @@ def get(request, *args, **kwargs):
 
     return render(request, 'frontend/view_file.html', context)
 
+@csrf_exempt
 def post(request, *args, **kwargs):
     if request.method != 'POST':
         return render(request, 'frontend/error.html', { "error": "POST method required for posting changes." })
