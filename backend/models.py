@@ -106,7 +106,7 @@ class User(models.Model):
         session = Session.create(newId)
 
         newUser = cls(userId=newId, session=session, userFile=cls.genPath(session.sessionId, newId))
-        newUser.userFile.save(newUser.userFile.name, "")
+        newUser.userFile.save(newUser.userFile.name, ContentFile(""))
         newUser.save()
 
         return newUser
