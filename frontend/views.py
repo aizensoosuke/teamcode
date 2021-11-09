@@ -36,12 +36,12 @@ def post(request, *args, **kwargs):
     if request.method != 'POST':
         return render(request, 'frontend/error.html', { "error": "POST method required for posting changes." })
 
-    jsondecoded = json.loads(request.body)
+    data = json.loads(request.body)
     sessionId = jsondecoded["sessionId"]
     userId = jsondecoded["userId"]
     
-    if "data" not in jsondecoded:
-        return render(request, 'frontend/error.html', { "error": "No data posted." })
+    if "content" not in jsondecoded:
+        return render(request, 'frontend/error.html', { "error": "No content posted." })
 
     fileSubmitted = jsondecoded["content"]
 
