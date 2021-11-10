@@ -1,6 +1,7 @@
 import json
 
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from backend.models import Session, User
@@ -47,9 +48,11 @@ def post(request, *args, **kwargs):
     fileSubmitted = data["content"]
 
     user = User.objects.all().filter(userId = userId, session__sessionId = sessionId)[0]
-    message = user.write(fileSubmitted)
+    user.write(fileSubmitted)
+    mergedContent = user.session.get()
 
-    context = {
-        "message": message 
+    jsonData = {
+        "mergedContent": mergedContent
     }
-    return render(request, 'frontend/success.html', context)
+
+    return JsonResponse(jsonData)
